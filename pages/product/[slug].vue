@@ -189,11 +189,15 @@ import ProductReviews from "~/components/product/ProductReviews.vue";
 const selectedColor = ref("Green");
 const selectedSize = ref("M");
 
+const route = useRoute();
+const slug = route.params.slug;
+
 const { data: productData, pending } = await useFetch("/api/admin/product", {
   server: true,
   transform: (response) => {
-    if (response.success && response.data) {
-      return response.data;
+    if (response.success && Array.isArray(response.data) && response.data.length > 0) {
+      const byId = response.data.find((p) => String(p.id) === String(slug));
+      return byId ?? response.data[0];
     }
     return null;
   },

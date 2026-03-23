@@ -120,8 +120,8 @@
           <div
             class="flex fl/ex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-delayed justify-center lg:justify-start"
           >
-            <button
-              @click="discoverRandomProduct"
+            <NuxtLink
+              to="/products"
               class="group inline-flex items-center justify-center px-6 sm:px-8 lg:px-10 py-4 sm:py-5 bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-red-500 hover:to-pink-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 animate-shimmer bg-size-200"
             >
               Discover Now
@@ -129,7 +129,7 @@
                 :icon="faArrowRight"
                 class="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300"
               />
-            </button>
+            </NuxtLink>
             <button
               class="group inline-flex items-center justify-center px-6 sm:px-8 lg:px-10 py-4 sm:py-5 bg-white hover:bg-gradient-to-r hover:from-gray-50 hover:to-orange-50 text-gray-900 font-bold text-base sm:text-lg rounded-xl border-2 border-gray-200 hover:border-orange-300 transition-all duration-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
@@ -626,12 +626,4 @@ definePageMeta({
   layout: "default",
 });
 
-const discoverRandomProduct = () => {
-  const randomString = Array.from({ length: 20 }, () =>
-    Math.random().toString(36).charAt(2),
-  ).join("");
-  const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-  const randomId = Math.random() > 0.5 ? randomString : randomNum.toString();
-  navigateTo(`/product/${randomId}`);
-};
 </script>

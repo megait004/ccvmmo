@@ -41,7 +41,7 @@ const db = new Database(dbPath);
 
 const schema = `
 CREATE TABLE IF NOT EXISTS product (
-    id INTEGER PRIMARY KEY AUTOINCREMENT CHECK (id = 1),
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT DEFAULT '',
     description TEXT DEFAULT '',
     price DECIMAL(10, 2) DEFAULT 0,

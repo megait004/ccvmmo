@@ -4,9 +4,9 @@
       <div class="flex items-center justify-between h-[70px]">
         <NuxtLink to="/" class="flex items-center">
           <img
-            src="/img/logo.webp"
-            alt="Flash Deals Logo"
-            class="h-12 w-auto object-contain"
+            src="/img/logo.svg"
+            alt="Zade Wear Logo"
+            class="h-14 w-auto object-contain"
           />
         </NuxtLink>
 

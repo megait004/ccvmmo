@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     ssr: true,
     routeRules: {
         '/': { ssr: false },
+        '/products': { ssr: false },
         '/product/**': { ssr: true },
         '/admin/**': { ssr: false }
     },
@@ -29,6 +30,9 @@ export default defineNuxtConfig({
         autoImport: true
     },
     vite: {
-        plugins: [tailwindcss()]
+        plugins: [tailwindcss()],
+        server: {
+            allowedHosts: true
+        }
     }
 });

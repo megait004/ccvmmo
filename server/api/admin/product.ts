@@ -5,70 +5,90 @@ export default defineEventHandler(async (event) => {
 
   try {
     if (method === "GET") {
-      const stmt = db.prepare("SELECT * FROM product LIMIT 1");
-      const product = stmt.get() as Product | undefined;
+      const stmt = db.prepare("SELECT * FROM product");
+      const products = stmt.all() as Product[];
 
       return {
         success: true,
-        data: product ?? {
-          id: null,
-          name: "",
-          description: "",
-          price: 0,
-          discount: 0,
-          care_instructions: "",
-          images: "[]",
-          stock: 0,
-        },
+        data: products,
+      };
+    }
+
+    if (method === "POST") {
+      const body = await readBody(event);
+
+      const insertStmt = db.prepare(`
+        INSERT INTO product (name, description, price, discount, care_instructions, images, stock)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      const result = insertStmt.run(
+        body.name ?? "",
+        body.description ?? "",
+        parseFloat(body.price) || 0,
+        parseInt(body.discount) || 0,
+        body.care_instructions ?? "",
+        body.images ?? "[]",
+        parseInt(body.stock) || 0,
+      );
+
+      return {
+        success: true,
+        message: "Thêm sản phẩm thành công",
+        id: result.lastInsertRowid,
       };
     }
 
     if (method === "PUT") {
       const body = await readBody(event);
 
-      const checkStmt = db.prepare("SELECT id FROM product LIMIT 1");
-      const existingProduct = checkStmt.get() as
-        | Pick<Product, "id">
-        | undefined;
-
-      if (existingProduct) {
-        const updateStmt = db.prepare(`
-          UPDATE product
-          SET name = ?, description = ?, price = ?, discount = ?,
-              care_instructions = ?, images = ?, stock = ?
-          WHERE id = ?
-        `);
-
-        updateStmt.run(
-          body.name ?? "",
-          body.description ?? "",
-          parseFloat(body.price) ?? 0,
-          parseInt(body.discount) ?? 0,
-          body.care_instructions ?? "",
-          body.images ?? "[]",
-          parseInt(body.stock) ?? 0,
-          existingProduct.id,
-        );
-      } else {
-        const insertStmt = db.prepare(`
-          INSERT INTO product (name, description, price, discount, care_instructions, images, stock)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
-        `);
-
-        insertStmt.run(
-          body.name ?? "",
-          body.description ?? "",
-          parseFloat(body.price) ?? 0,
-          parseInt(body.discount) ?? 0,
-          body.care_instructions ?? "",
-          body.images ?? "[]",
-          parseInt(body.stock) ?? 0,
-        );
+      if (!body.id) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: "Thiếu id sản phẩm",
+        });
       }
+
+      const updateStmt = db.prepare(`
+        UPDATE product
+        SET name = ?, description = ?, price = ?, discount = ?,
+            care_instructions = ?, images = ?, stock = ?
+        WHERE id = ?
+      `);
+
+      updateStmt.run(
+        body.name ?? "",
+        body.description ?? "",
+        parseFloat(body.price) || 0,
+        parseInt(body.discount) || 0,
+        body.care_instructions ?? "",
+        body.images ?? "[]",
+        parseInt(body.stock) || 0,
+        body.id,
+      );
 
       return {
         success: true,
-        message: "Lưu sản phẩm thành công",
+        message: "Cập nhật sản phẩm thành công",
+      };
+    }
+
+    if (method === "DELETE") {
+      const body = await readBody(event);
+
+      if (!body.id) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: "Thiếu id sản phẩm",
+        });
+      }
+
+      const deleteStmt = db.prepare("DELETE FROM product WHERE id = ?");
+      deleteStmt.run(body.id);
+
+      return {
+        success: true,
+        message: "Xóa sản phẩm thành công",
       };
     }
 
@@ -76,5 +96,7 @@ export default defineEventHandler(async (event) => {
       statusCode: 405,
       statusMessage: "Phương thức không được phép",
     });
-  } catch {}
+  } catch (error) {
+    throw error;
+  }
 });
