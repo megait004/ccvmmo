@@ -1,5 +1,6 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50">
+        <div id="paypal-button-container" style="position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none;"></div>
         <div class="bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 py-8">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="text-center text-white space-y-6">
@@ -285,7 +286,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faFileInvoice, faCreditCard, faLock, faShieldAlt, faSpinner, faCheckCircle, faTimesCircle, faMobileAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import countriesData from '~/assets/countries.json';
@@ -492,6 +493,23 @@ const handleSubmit = async () => {
         }
     } catch {}
 };
+
+onMounted(() => {
+    const nuxtApp = useNuxtApp();
+    const paypalInstance = nuxtApp.$paypal;
+    if (paypalInstance && typeof paypalInstance.Buttons === 'function') {
+        paypalInstance.Buttons({
+            createOrder: (_data, actions) => {
+                return actions.order.create({
+                    purchase_units: [{ amount: { value: total.value.toFixed(2) } }]
+                });
+            },
+            onApprove: (_data, actions) => {
+                return actions.order.capture();
+            }
+        }).render('#paypal-button-container');
+    }
+});
 
 onUnmounted(() => {
     if (statusInterval.value) {

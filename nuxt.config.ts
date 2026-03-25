@@ -4,6 +4,10 @@ import { fileURLToPath } from 'url';
 export default defineNuxtConfig({
     compatibilityDate: '2025-05-15',
     devtools: { enabled: false },
+    modules: ['nuxt-paypal'],
+    paypal: {
+        clientId: process.env.PAYPAL_CLIENT_ID || 'test'
+    },
     alias: {
         '~': fileURLToPath(new URL('.', import.meta.url))
     },
