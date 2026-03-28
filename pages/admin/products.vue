@@ -32,11 +32,13 @@
             :class="editProduct?.id === p.id ? 'border-orange-400 bg-orange-50' : 'border-gray-200 bg-white hover:border-gray-300'"
           >
             <div class="flex items-start space-x-3">
-              <img
-                :src="getProductCoverImage(p)"
-                :alt="p.name"
-                class="w-16 h-16 rounded-xl object-cover border border-gray-200 flex-shrink-0"
-              />
+              <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-1">
+                <img
+                  :src="getProductCoverImage(p)"
+                  :alt="p.name"
+                  class="h-full w-full object-contain"
+                />
+              </div>
               <div class="flex-1 min-w-0">
                 <div class="font-bold text-gray-900 truncate">{{ p.name || '(Chưa đặt tên)' }}</div>
                 <div class="text-sm text-gray-500 mt-0.5">
@@ -325,11 +327,13 @@
                     </div>
 
                     <div class="mt-4 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
-                      <img
-                        :src="variant.image || '/img/cotton_short.webp'"
-                        :alt="variant.color_name || `Variant ${index + 1}`"
-                        class="h-16 w-16 rounded-xl border border-gray-200 object-cover"
-                      />
+                      <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-1">
+                        <img
+                          :src="variant.image || '/img/cotton_short.webp'"
+                          :alt="variant.color_name || `Variant ${index + 1}`"
+                          class="h-full w-full object-contain"
+                        />
+                      </div>
                       <div class="text-sm text-gray-600">
                         <div class="font-semibold text-gray-900">
                           {{ variant.color_name || `Màu ${index + 1}` }}
@@ -425,11 +429,13 @@
                   </div>
                 </div>
               </div>
-              <img
-                :src="formPreviewImage"
-                :alt="form.name"
-                class="w-full h-48 rounded-2xl object-cover border-2 border-gray-200 shadow-md"
-              />
+              <div class="flex h-48 w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-gray-200 bg-gray-50 p-3 shadow-md">
+                <img
+                  :src="formPreviewImage"
+                  :alt="form.name"
+                  class="h-full w-full object-contain"
+                />
+              </div>
             </div>
 
             <div class="rounded-2xl bg-gray-50 p-4 border border-gray-200">

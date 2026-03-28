@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-4">
     <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-      <div class="relative aspect-square bg-gray-100">
+      <div class="relative aspect-square bg-gray-50">
         <img
           :src="currentImage"
           :alt="productLabel"
-          class="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          class="h-full w-full object-contain p-4 transition-transform duration-300 hover:scale-[1.02]"
           @error="handleImageError"
         />
 
@@ -63,12 +63,14 @@
           "
           :aria-label="`Open image ${index + 1}`"
         >
-          <img
-            :src="image"
-            :alt="`${productLabel} ${index + 1}`"
-            class="aspect-square h-full w-full object-cover"
-            @error="handleImageError"
-          />
+          <div class="aspect-square bg-gray-50 p-2">
+            <img
+              :src="image"
+              :alt="`${productLabel} ${index + 1}`"
+              class="h-full w-full object-contain"
+              @error="handleImageError"
+            />
+          </div>
         </button>
       </div>
     </div>

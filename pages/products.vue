@@ -55,7 +55,7 @@
               <img
                 :src="getFirstImage(product.images)"
                 :alt="product.name"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500"
               />
               <div v-if="product.discount > 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                 -{{ product.discount }}%
