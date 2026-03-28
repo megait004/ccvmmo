@@ -9,11 +9,12 @@
       >
         <FontAwesomeIcon :icon="faBars" class="w-6 h-6 text-orange-500" />
       </button>
-      <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">
+      <div class="text-xl lg:text-2xl font-semibold text-gray-900">
         {{ pageTitle }}
-      </h1>
+      </div>
     </div>
     <button
+      @click="handleLogout"
       class="group relative overflow-hidden bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:from-red-600 hover:via-red-700 hover:to-red-800 px-4 lg:px-6 py-2 lg:py-3 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ease-out transform hover:-translate-y-0.5 bg-size-200 animate-gradient"
     >
       <span class="relative z-10 flex items-center space-x-2">
@@ -30,7 +31,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faBars, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -41,6 +42,7 @@ const pageTitle = computed(() => {
   if (path.startsWith("/admin/products")) return "Sửa SP";
   if (path.startsWith("/admin/orders")) return "List CVV";
   if (path.startsWith("/admin/settings")) return "Đổi MK";
+  return "Admin";
 });
 
 const toggleSidebar = () => {
@@ -58,5 +60,15 @@ const toggleSidebar = () => {
       overlay.classList.add("hidden");
     }
   }
+};
+
+const handleLogout = async () => {
+  try {
+    await $fetch("/api/admin/auth/logout", {
+      method: "POST",
+    });
+  } catch {}
+
+  await navigateTo("/admin/login");
 };
 </script>

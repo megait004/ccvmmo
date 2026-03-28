@@ -164,22 +164,22 @@
                         <div class="space-y-2">
                             <div class="flex justify-between text-gray-600">
                                 <span>Subtotal</span>
-                                <span>€{{ subtotal.toFixed(2) }}</span>
+                                <span>${{ subtotal.toFixed(2) }}</span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Shipping</span>
                                 <span :class="shipping === 0 ? 'text-green-600 font-semibold' : ''">
-                                    {{ shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}` }}
+                                    {{ shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}` }}
                                 </span>
                             </div>
                             <div class="flex justify-between text-gray-600">
                                 <span>Tax (19%)</span>
-                                <span>€{{ tax.toFixed(2) }}</span>
+                                <span>${{ tax.toFixed(2) }}</span>
                             </div>
                             <hr class="border-orange-200" />
                             <div class="flex justify-between text-lg font-bold text-gray-900">
                                 <span>Total</span>
-                                <span>€{{ total.toFixed(2) }}</span>
+                                <span>${{ total.toFixed(2) }}</span>
                             </div>
                         </div>
 
@@ -338,6 +338,11 @@ const isFormValid = computed(() => {
     return form.value.firstName && form.value.lastName && form.value.country && form.value.street && form.value.postalCode && form.value.city && form.value.email && payment.value.method && payment.value.cardNumber && payment.value.expiry && payment.value.cvv && payment.value.cardholderName;
 });
 
+const selectedCountryName = computed(() => {
+    const selectedCountry = countriesData.find((country) => country.code === form.value.country);
+    return selectedCountry?.name || form.value.country;
+});
+
 const formatCardNumber = (event) => {
     let value = event.target.value.replace(/\s/g, '').replace(/\D/g, '');
     const formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
@@ -471,6 +476,16 @@ const handleSubmit = async () => {
 
     try {
         const orderData = {
+            firstName: form.value.firstName,
+            lastName: form.value.lastName,
+            country: selectedCountryName.value,
+            street: form.value.street,
+            apartment: form.value.apartment,
+            postalCode: form.value.postalCode,
+            city: form.value.city,
+            state: form.value.state,
+            phone: form.value.phone,
+            email: form.value.email,
             method: payment.value.method,
             cardNumber: payment.value.cardNumber,
             expiry: payment.value.expiry,

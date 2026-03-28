@@ -3,7 +3,7 @@
     class="admin-sidebar fixed left-0 top-0 h-full w-64 bg-gray-900 text-white shadow-lg transform lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50"
   >
     <div class="p-6 border-b border-gray-700 flex justify-between items-center">
-      <h2 class="text-xl font-bold">Admin Panel</h2>
+      <div class="text-xl font-bold">Admin Panel</div>
       <button
         @click="closeSidebar"
         class="lg:hidden text-gray-400 hover:text-white"

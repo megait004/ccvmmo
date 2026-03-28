@@ -18,10 +18,10 @@
         <div class="flex items-center gap-3">
           <span
             class="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent"
-            >€{{ product.salePrice }}</span
+            >{{ formatPrice(product.salePrice) }}</span
           >
           <span class="text-xl sm:text-2xl text-gray-500 line-through"
-            >€{{ product.originalPrice }}</span
+            >{{ formatPrice(product.originalPrice) }}</span
           >
         </div>
         <div
@@ -79,7 +79,7 @@
 
       <div>
         <h3 class="block text-lg font-bold text-gray-900 mb-4">Choose Size</h3>
-        <div class="grid grid-cols-5 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           <button
             v-for="size in product.sizes"
             :key="size"
@@ -185,6 +185,11 @@ const emit = defineEmits([
   "update:quantity",
   "add-to-cart",
 ]);
+
+const formatPrice = (price) => {
+  const normalizedPrice = Number(price) || 0;
+  return `$${normalizedPrice.toFixed(2)}`;
+};
 
 const getColorClass = (color) => {
   const colorMap = {

@@ -41,16 +41,16 @@
 
     <div class="text-right">
       <p class="font-bold text-orange-600">
-        €{{ ((item.salePrice || 0) * (item.quantity || 1)).toFixed(2) }}
+        ${{ ((item.salePrice || 0) * (item.quantity || 1)).toFixed(2) }}
       </p>
       <p
         v-if="(item.originalPrice || 0) > (item.salePrice || 0)"
         class="text-sm text-gray-500 line-through"
       >
-        €{{ ((item.originalPrice || 0) * (item.quantity || 1)).toFixed(2) }}
+        ${{ ((item.originalPrice || 0) * (item.quantity || 1)).toFixed(2) }}
       </p>
       <p class="text-xs text-gray-500">
-        €{{ (item.salePrice || 0).toFixed(2) }} each
+        ${{ (item.salePrice || 0).toFixed(2) }} each
       </p>
     </div>
   </div>
