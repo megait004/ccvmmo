@@ -8,11 +8,9 @@
         Hot Deal
       </div>
 
-      <h1
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
-      >
+      <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
         {{ product.name }}
-      </h1>
+      </div>
 
       <div class="flex flex-wrap items-center gap-4 mb-4">
         <div class="flex items-center gap-3">
@@ -53,28 +51,29 @@
     <div class="space-y-6">
       <div>
         <h3 class="block text-lg font-bold text-gray-900 mb-4">Choose Color</h3>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
           <button
-            v-for="color in product.colors"
-            :key="color"
-            @click="$emit('update:color', color)"
-            class="w-14 h-14 rounded-full border-3 transition-all duration-300 flex items-center justify-center transform hover:scale-110 hover:-translate-y-1 shadow-lg hover:shadow-xl"
-            :class="
-              selectedColor === color
-                ? 'border-orange-500 ring-4 ring-orange-200 scale-110'
-                : 'border-gray-300 hover:border-orange-400'
-            "
+            v-for="variant in product.variants"
+            :key="variant.id"
+            type="button"
+            @click="$emit('update:variant', variant.id)"
+            :title="variant.color_name"
+            :style="{ backgroundColor: variant.color_code || '#D1D5DB' }"
+            class="relative w-10 h-10 rounded-full shadow-md transition-all duration-200 focus:outline-none"
+            :class="[
+              String(variant.id) === String(selectedVariantId)
+                ? 'ring-[3px] ring-orange-500 ring-offset-2 scale-110'
+                : 'hover:ring-2 hover:ring-orange-300 hover:ring-offset-1 hover:scale-110',
+              Number(variant.stock) <= 0 ? 'opacity-40 cursor-not-allowed' : ''
+            ]"
           >
-            <div
-              class="w-10 h-10 rounded-full shadow-inner"
-              :class="getColorClass(color)"
-            ></div>
+            <FontAwesomeIcon
+              v-if="String(variant.id) === String(selectedVariantId)"
+              :icon="faCheck"
+              class="absolute inset-0 m-auto h-3.5 w-3.5 text-white drop-shadow"
+            />
           </button>
         </div>
-        <p class="text-sm text-gray-600 mt-2">
-          Selected:
-          <span class="font-medium text-gray-900">{{ selectedColor }}</span>
-        </p>
       </div>
 
       <div>
@@ -166,6 +165,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faStar,
+  faCheck,
   faMinus,
   faPlus,
   faShoppingCart,
@@ -174,13 +174,13 @@ import {
 
 const props = defineProps({
   product: Object,
-  selectedColor: String,
+  selectedVariantId: { type: [String, Number], default: null },
   selectedSize: String,
   quantity: Number,
 });
 
 const emit = defineEmits([
-  "update:color",
+  "update:variant",
   "update:size",
   "update:quantity",
   "add-to-cart",
@@ -189,16 +189,6 @@ const emit = defineEmits([
 const formatPrice = (price) => {
   const normalizedPrice = Number(price) || 0;
   return `$${normalizedPrice.toFixed(2)}`;
-};
-
-const getColorClass = (color) => {
-  const colorMap = {
-    Blue: "bg-blue-500",
-    Green: "bg-green-500",
-    Red: "bg-red-500",
-    Yellow: "bg-yellow-500",
-  };
-  return colorMap[color] || "bg-gray-400";
 };
 
 const decreaseQuantity = () => {

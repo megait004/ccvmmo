@@ -1,21 +1,32 @@
 import { ref, computed } from 'vue';
 
+type Id = string | number;
+
 interface Product {
-    id: string | number;
+    id: Id;
     name: string;
     originalPrice: number;
     salePrice: number;
     discount: number;
     image?: string;
+    variantId?: Id;
+}
+
+interface ProductVariant {
+    id?: Id;
+    color_name?: string;
+    color_code?: string;
 }
 
 interface CartItem {
-    id: string | number;
+    id: Id;
+    variantId?: Id;
     name: string;
     originalPrice: number;
     salePrice: number;
     discount: number;
     color: string;
+    colorCode?: string;
     size: string;
     quantity: number;
     image: string;
@@ -42,50 +53,63 @@ const saveCart = () => {
 };
 
 export const useCart = () => {
-    const generateItemKey = (productId: string | number, color: string, size: string): string => {
-        return `${productId}-${color}-${size}`;
+    const generateItemKey = (
+        productId: Id,
+        variantId: Id | undefined,
+        color: string,
+        size: string
+    ): string => {
+        const variantKey = variantId ?? color;
+        return `${productId}-${variantKey}-${size}`;
     };
 
-    const addToCart = (product: Product, selectedColor: string, selectedSize: string, quantity: number): void => {
+    const addToCart = (
+        product: Product,
+        selectedVariant: ProductVariant | null | undefined,
+        selectedSize: string,
+        quantity: number
+    ): void => {
+        const selectedColor = selectedVariant?.color_name || 'Default';
+        const selectedColorCode = selectedVariant?.color_code || '#D1D5DB';
+        const selectedVariantId = selectedVariant?.id ?? product.variantId;
+
         if (!product || !selectedColor || !selectedSize || quantity <= 0) {
             console.error('Invalid product data or quantity');
             return;
         }
 
-        const itemKey = generateItemKey(product.id, selectedColor, selectedSize);
-        const existingItemIndex = cartItems.value.findIndex((item) => generateItemKey(item.id, item.color, item.size) === itemKey);
+        const itemKey = generateItemKey(product.id, selectedVariantId, selectedColor, selectedSize);
+        const existingItemIndex = cartItems.value.findIndex(
+            (item) => generateItemKey(item.id, item.variantId, item.color, item.size) === itemKey
+        );
 
-        if (existingItemIndex !== -1) {
-            cartItems.value[existingItemIndex].quantity += quantity;
-        } else {
+        if (existingItemIndex === -1) {
             const newItem: CartItem = {
                 id: product.id,
+                variantId: selectedVariantId,
                 name: product.name || '',
                 originalPrice: product.originalPrice || 0,
                 salePrice: product.salePrice || 0,
                 discount: product.discount || 0,
                 color: selectedColor,
+                colorCode: selectedColorCode,
                 size: selectedSize,
                 quantity: quantity,
                 image: product.image ?? '/img/cotton_short.webp',
                 itemKey
             };
             cartItems.value.push(newItem);
+            saveCart();
+            return;
         }
 
+        cartItems.value[existingItemIndex].quantity += quantity;
         saveCart();
     };
 
     const removeFromCart = (itemKey: string): void => {
         cartItems.value = cartItems.value.filter((item) => item.itemKey !== itemKey);
         saveCart();
-        if (import.meta.client && cartItems.value.length === 0) {
-            const router = useRouter();
-            const randomString = Array.from({ length: 20 }, () => Math.random().toString(36).charAt(2)).join('');
-            const randomNum = Math.floor(Math.random() * 9000000000) + 1000000000;
-            const randomId = Math.random() > 0.5 ? randomString : randomNum.toString();
-            router.push(`/product/${randomId}`);
-        }
     };
 
     const updateQuantity = (itemKey: string, newQuantity: number): void => {
@@ -104,21 +128,6 @@ export const useCart = () => {
     const clearCart = (): void => {
         cartItems.value = [];
         saveCart();
-    };
-
-    const getItemByKey = (itemKey: string): CartItem | undefined => {
-        return cartItems.value.find((item) => item.itemKey === itemKey);
-    };
-
-    const isInCart = (productId: string | number, color: string, size: string): boolean => {
-        const itemKey = generateItemKey(productId, color, size);
-        return cartItems.value.some((item) => item.itemKey === itemKey);
-    };
-
-    const getCartItemQuantity = (productId: string | number, color: string, size: string): number => {
-        const itemKey = generateItemKey(productId, color, size);
-        const item = cartItems.value.find((item) => item.itemKey === itemKey);
-        return item ? item.quantity : 0;
     };
 
     const subtotal = computed(() => {
@@ -153,9 +162,6 @@ export const useCart = () => {
         removeFromCart,
         updateQuantity,
         clearCart,
-        getItemByKey,
-        isInCart,
-        getCartItemQuantity,
         subtotal,
         tax,
         shipping,

@@ -1,157 +1,90 @@
 <template>
-  <div
-    class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 relative"
-  >
-    <div class="absolute inset-0 opacity-5">
-      <div
-        class="absolute inset-0"
-        style="
-          background-image:
-            radial-gradient(circle at 25% 25%, #f97316 2px, transparent 2px),
-            radial-gradient(circle at 75% 75%, #ea580c 1px, transparent 1px);
-          background-size: 50px 50px;
-        "
-      ></div>
-    </div>
-    <div
-      class="bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 py-2 sm:py-4 relative backdrop-blur-sm"
-    >
-      <div class="absolute inset-0 bg-black/10"></div>
-      <div class="max-w-7xl mx-auto px-2 sm:px-4 relative z-10">
-        <div
-          class="flex flex-wrap justify-center lg:grid lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6 text-white"
-        >
-          <div
-            class="flex items-center gap-1 sm:gap-3 group cursor-pointer hover:bg-white/10 p-1 sm:p-3 rounded-xl transition-all duration-300"
-          >
-            <div
-              class="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 flex-shrink-0"
-            >
-              <FontAwesomeIcon
-                :icon="faShippingFast"
-                class="w-3 h-3 sm:w-5 sm:h-5 text-white"
-              />
-            </div>
-            <div class="text-left">
-              <div class="font-bold text-xs sm:text-sm">Free Shipping</div>
-              <div class="text-xs text-orange-100 hidden sm:block">
-                On all orders over $30
-              </div>
-            </div>
-          </div>
-          <div
-            class="flex items-center gap-1 sm:gap-3 group cursor-pointer hover:bg-white/10 p-1 sm:p-3 rounded-xl transition-all duration-300"
-          >
-            <div
-              class="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 flex-shrink-0"
-            >
-              <FontAwesomeIcon
-                :icon="faUndo"
-                class="w-3 h-3 sm:w-5 sm:h-5 text-white"
-              />
-            </div>
-            <div class="text-left">
-              <div class="font-bold text-xs sm:text-sm">30 Day Return</div>
-              <div class="text-xs text-orange-100 hidden sm:block">
-                30 day money back guarantee
-              </div>
-            </div>
-          </div>
-          <div
-            class="flex items-center gap-1 sm:gap-3 group cursor-pointer hover:bg-white/10 p-1 sm:p-3 rounded-xl transition-all duration-300"
-          >
-            <div
-              class="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 flex-shrink-0"
-            >
-              <FontAwesomeIcon
-                :icon="faGlobe"
-                class="w-3 h-3 sm:w-5 sm:h-5 text-white"
-              />
-            </div>
-            <div class="text-left">
-              <div class="font-bold text-xs sm:text-sm">
-                International Warranty
-              </div>
-              <div class="text-xs text-orange-100 hidden sm:block">
-                Offered in the country of usage
-              </div>
-            </div>
-          </div>
-          <div
-            class="flex items-center gap-1 sm:gap-3 group cursor-pointer hover:bg-white/10 p-1 sm:p-3 rounded-xl transition-all duration-300"
-          >
-            <div
-              class="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 flex-shrink-0"
-            >
-              <FontAwesomeIcon
-                :icon="faCreditCard"
-                class="w-3 h-3 sm:w-5 sm:h-5 text-white"
-              />
-            </div>
-            <div class="text-left">
-              <div class="font-bold text-xs sm:text-sm">
-                100% Secure Payment
-              </div>
-              <div class="text-xs text-orange-100 hidden sm:block">
-                PayPal / MasterCard / Visa
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 relative"
-    >
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-      ></div>
-      <div class="max-w-7xl mx-auto px-4 py-4 relative z-10">
-        <nav class="flex items-center space-x-2 text-sm animate-fade-in-up">
+  <div class="min-h-screen bg-gray-50">
+    <div class="border-b border-gray-200 bg-white">
+      <div class="mx-auto max-w-7xl px-4 py-4">
+        <nav class="flex items-center space-x-2 text-sm">
           <NuxtLink
             to="/"
-            class="text-gray-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-gray-500 transition hover:text-orange-600"
             >Home</NuxtLink
           >
           <FontAwesomeIcon
             :icon="faChevronRight"
-            class="w-3 h-3 text-gray-400"
+            class="h-3 w-3 text-gray-400"
           />
-          <span class="text-gray-900 font-medium">{{
+          <NuxtLink to="/products" class="text-gray-500 transition hover:text-orange-600">
+            Products
+          </NuxtLink>
+          <FontAwesomeIcon
+            :icon="faChevronRight"
+            class="h-3 w-3 text-gray-400"
+          />
+          <span class="font-medium text-gray-900">{{
             product.name || "Loading..."
           }}</span>
         </nav>
       </div>
     </div>
-    <div
-      class="max-w-7xl mx-auto px-3 sm:px-4 py-8 sm:py-12 lg:py-16 relative z-10"
-    >
-      <div
-        v-if="pending"
-        class="flex justify-center items-center min-h-[400px]"
-      >
+
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:py-10 lg:py-12">
+      <div v-if="pending" class="flex min-h-[320px] items-center justify-center">
         <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"
+          class="h-12 w-12 animate-spin rounded-full border-b-2 border-orange-500"
         ></div>
       </div>
 
-      <div v-else>
-        <div
-          class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start"
+      <div
+        v-else-if="!productData"
+        class="rounded-3xl border border-gray-200 bg-white px-6 py-16 text-center shadow-sm"
+      >
+        <div class="text-2xl font-bold text-gray-900">Product not found</div>
+        <div class="mt-2 text-sm text-gray-500">
+          The link may no longer be valid or the product has been removed from the store.
+        </div>
+        <NuxtLink
+          to="/products"
+          class="mt-6 inline-flex rounded-full bg-orange-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
         >
-          <div class="space-y-4 animate-fade-in-up">
+          Back to products
+        </NuxtLink>
+      </div>
+
+      <div v-else class="space-y-10">
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-12">
+          <div class="space-y-4">
             <ProductGallery
               :images="productImages"
-              :selectedColor="selectedColor"
+              :selectedLabel="selectedColor"
+              :discount="product.discount"
+              :name="product.name"
             />
           </div>
-          <div class="space-y-6 animate-fade-in-delayed">
+
+          <div class="space-y-6">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div
+                v-for="highlight in serviceHighlights"
+                :key="highlight.label"
+                class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <FontAwesomeIcon :icon="highlight.icon" class="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-gray-900">{{ highlight.label }}</div>
+                    <div class="text-xs text-gray-500">{{ highlight.value }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <ProductInfo
               :product="product"
-              :selectedColor="selectedColor"
+              :selectedVariantId="selectedVariantId"
               :selectedSize="selectedSize"
               :quantity="quantity"
-              @update:color="selectedColor = $event"
+              @update:variant="selectedVariantId = $event"
               @update:size="selectedSize = $event"
               @update:quantity="quantity = $event"
               @add-to-cart="handleAddToCart"
@@ -159,10 +92,11 @@
           </div>
         </div>
 
-        <div class="mt-12 lg:mt-16 animate-fade-in-up">
+        <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <ProductTabs :product="product" />
         </div>
-        <div class="mt-12 lg:mt-16">
+
+        <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <ProductReviews />
         </div>
       </div>
@@ -171,13 +105,12 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faChevronRight,
   faShippingFast,
   faUndo,
-  faGlobe,
   faCreditCard,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -197,8 +130,27 @@ const productSizes = [
   "4x-large",
 ];
 
-const selectedColor = ref("Green");
+const serviceHighlights = [
+  {
+    icon: faShippingFast,
+    label: "Fast Delivery",
+    value: "Free on orders over $30",
+  },
+  {
+    icon: faUndo,
+    label: "Returns",
+    value: "Supported within 30 days",
+  },
+  {
+    icon: faCreditCard,
+    label: "Payment",
+    value: "Secure and safe",
+  },
+];
+
+const selectedVariantId = ref(null);
 const selectedSize = ref("medium");
+const quantity = ref(1);
 
 const route = useRoute();
 const slug = route.params.slug;
@@ -207,21 +159,104 @@ const { data: productData, pending } = await useFetch("/api/admin/product", {
   server: true,
   transform: (response) => {
     if (response.success && Array.isArray(response.data) && response.data.length > 0) {
-      const byId = response.data.find((p) => String(p.id) === String(slug));
-      return byId ?? response.data[0];
+      return response.data.find((p) => String(p.id) === String(slug)) ?? null;
     }
     return null;
   },
 });
 
-const quantity = ref(1);
+const fallbackVariant = {
+  id: 0,
+  product_id: 0,
+  color_code: "#D1D5DB",
+  color_name: "Default",
+  image: "",
+  price: 0,
+  stock: 0,
+  is_active: 1,
+  is_default: 1,
+  display_order: 0,
+};
+
+const getParsedImages = (images) => {
+  if (typeof images !== "string" || images.trim() === "") {
+    return [];
+  }
+
+  try {
+    const parsedImages = JSON.parse(images);
+    return Array.isArray(parsedImages)
+      ? parsedImages.filter((image) => typeof image === "string" && image.trim() !== "")
+      : [];
+  } catch {
+    return [];
+  }
+};
+
+const getNormalizedVariants = (data) => {
+  if (!data) {
+    return [fallbackVariant];
+  }
+
+  const variants = Array.isArray(data.variants) ? data.variants : [];
+  const activeVariants = variants.filter((variant) => Number(variant.is_active) !== 0);
+
+  if (activeVariants.length > 0) {
+    return activeVariants;
+  }
+
+  const fallbackImages = getParsedImages(data.images);
+
+  return [
+    {
+      ...fallbackVariant,
+      product_id: data.id || 0,
+      image: fallbackImages[0] || "",
+      price: Number(data.price) || 0,
+      stock: Number(data.stock) || 0,
+    },
+  ];
+};
+
+const getDefaultVariantId = (variants) => {
+  return (
+    variants.find((variant) => Number(variant.is_default) === 1)?.id ??
+    variants[0]?.id ??
+    null
+  );
+};
 
 watch(
   productData,
   (newData) => {
-    if (newData?.quantity) {
-      quantity.value = Number(newData.quantity) || 1;
-    }
+    const variants = getNormalizedVariants(newData);
+    selectedVariantId.value = getDefaultVariantId(variants);
+    quantity.value = 1;
+  },
+  { immediate: true },
+);
+
+const variants = computed(() => {
+  return getNormalizedVariants(productData.value);
+});
+
+const selectedVariant = computed(() => {
+  return (
+    variants.value.find(
+      (variant) => String(variant.id) === String(selectedVariantId.value),
+    ) ?? variants.value[0]
+  );
+});
+
+const selectedColor = computed(() => {
+  return selectedVariant.value?.color_name || "Default";
+});
+
+watch(
+  selectedVariant,
+  (variant) => {
+    const maxStock = Math.max(Number(variant?.stock) || 0, 1);
+    quantity.value = Math.min(Math.max(quantity.value, 1), maxStock);
   },
   { immediate: true },
 );
@@ -237,10 +272,10 @@ const product = computed(() => {
       care_instructions: "",
       images: "[]",
       stock: 0,
-      quantity: 1,
       originalPrice: 0,
       salePrice: 0,
-      colors: ["Green", "Blue", "Red", "Yellow"],
+      selectedVariant: fallbackVariant,
+      variants: [fallbackVariant],
       sizes: productSizes,
       features: [],
       careInstructions: [],
@@ -248,22 +283,25 @@ const product = computed(() => {
   }
 
   const data = productData.value;
-  const price = Number(data.price) || 0;
+  const basePrice = Number(data.price) || 0;
   const discount = Number(data.discount) || 0;
+  const currentVariant = selectedVariant.value ?? fallbackVariant;
+  const currentPrice = Number(currentVariant.price) || basePrice;
+  const currentStock = Number(currentVariant.stock) || 0;
 
   return {
     id: data.id,
     name: data.name || "",
     description: data.description || "",
-    price,
+    price: currentPrice,
     discount,
     care_instructions: data.care_instructions || "",
     images: data.images || "[]",
-    stock: Number(data.stock) || 0,
-    quantity: Number(data.quantity) || 1,
-    originalPrice: price,
-    salePrice: price - (price * discount) / 100,
-    colors: ["Green", "Blue", "Red", "Yellow"],
+    stock: currentStock,
+    originalPrice: currentPrice,
+    salePrice: currentPrice - (currentPrice * discount) / 100,
+    selectedVariant: currentVariant,
+    variants: variants.value,
     sizes: productSizes,
     features: [],
     careInstructions: data.care_instructions
@@ -273,28 +311,31 @@ const product = computed(() => {
 });
 
 const productImages = computed(() => {
-  if (!productData.value?.images) {
-    return ["/img/cotton_short.webp"];
-  }
+  const variantImage = selectedVariant.value?.image?.trim() || "";
+  const fallbackImages = getParsedImages(productData.value?.images);
+  const mergedImages = [variantImage, ...fallbackImages].filter(
+    (image, index, allImages) => image && allImages.indexOf(image) === index,
+  );
 
-  try {
-    const images = JSON.parse(productData.value.images);
-    return images.length > 0 ? images : ["/img/cotton_short.webp"];
-  } catch {
-    return ["/img/cotton_short.webp"];
-  }
+  return mergedImages.length > 0 ? mergedImages : ["/img/cotton_short.webp"];
 });
 
 const { addToCart } = useCart();
 
 const handleAddToCart = () => {
+  if (!selectedVariant.value || product.value.stock <= 0) {
+    return;
+  }
+
   const productWithImage = {
     ...product.value,
-    image: productImages.value[0],
+    image: selectedVariant.value.image || productImages.value[0],
+    variantId: selectedVariant.value.id,
   };
+
   addToCart(
     productWithImage,
-    selectedColor.value,
+    selectedVariant.value,
     selectedSize.value,
     quantity.value,
   );

@@ -9,8 +9,16 @@
     />
 
     <div class="flex-1">
-      <h4 class="font-semibold text-gray-900">{{ item.name }}</h4>
-      <p class="text-sm text-gray-600">{{ item.color }} • {{ item.size }}</p>
+      <div class="font-semibold text-gray-900">{{ item.name }}</div>
+      <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-600">
+        <span
+          class="h-3.5 w-3.5 rounded-full border border-gray-200 shadow-sm"
+          :style="getColorStyle(item.colorCode)"
+        ></span>
+        <span>{{ item.color }}</span>
+        <span>•</span>
+        <span>{{ item.size }}</span>
+      </div>
 
       <div class="flex items-center gap-2 mt-2">
         <button
@@ -68,6 +76,15 @@ const props = defineProps({
 });
 
 const { updateQuantity, removeFromCart } = useCart();
+
+const getColorStyle = (colorCode) => {
+  return {
+    backgroundColor:
+      typeof colorCode === "string" && colorCode.trim() !== ""
+        ? colorCode
+        : "#D1D5DB",
+  };
+};
 
 const increaseQuantity = () => {
   updateQuantity(props.item.itemKey, props.item.quantity + 1);
